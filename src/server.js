@@ -3,7 +3,14 @@ require('dotenv').config();
 const {name, version} = require('../package.json');
 const Hapi = require('@hapi/hapi');
 
+const leaderboard = require('./api/leaderboard');
+const LeaderboardServices = require('./services/postgres/LeaderboardServices');
+
+const ClientError = require('./exceptions/ClientError');
+
 const init = async () => {
+  const leaderboardService = new LeaderboardServices();
+
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
@@ -27,6 +34,36 @@ const init = async () => {
         },
       };
     },
+  });
+
+  await server.register([
+    {
+      plugin: leaderboard,
+      options: {
+        service: leaderboardService,
+      },
+    },
+  ]);
+
+  server.ext('onPreResponse', (request, h) => {
+    const {response} = request;
+    if (response instanceof ClientError) {
+      return h.response({
+        error: true,
+        message: response.message,
+      }).statusCode(response.statusCode);
+    } else if (response instanceof Error) {
+      if (process.env.NODE_ENV !== 'production') {
+        console.error(response);
+      }
+
+      return h.response({
+        error: true,
+        message: 'Server error',
+      }).code(500);
+    }
+
+    return response.continue || response;
   });
 
   await server.start();
