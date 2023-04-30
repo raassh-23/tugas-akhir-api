@@ -4,7 +4,7 @@ const {mapLeaderboardDBToModel} = require('../../utils');
 
 class LeaderboardServices {
   constructor() {
-    this._pool = process.env.HEROKU ?
+    this._pool = !process.env.HEROKU ?
       new Pool() :
       new Pool({
         connectionString: process.env.DATABASE_URL,
