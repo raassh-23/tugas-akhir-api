@@ -4,14 +4,18 @@ const {mapLeaderboardDBToModel} = require('../../utils');
 
 class LeaderboardServices {
   constructor() {
-    this._pool = new Pool();
+    this._pool = process.env.HEROKU ?
+      new Pool() :
+      new Pool({
+        connectionString: process.env.DATABASE_URL,
+      });
   }
 
   async addItem({level, username, steps, commands, timeMs}) {
     const query = {
       text: 'INSERT INTO leaderboard' +
-            '(level, username, steps, commands, time_ms) ' +
-            'VALUES($1, $2, $3, $4, $5) RETURNING id',
+        '(level, username, steps, commands, time_ms) ' +
+        'VALUES($1, $2, $3, $4, $5) RETURNING id',
       values: [level, username, steps, commands, timeMs],
     };
 
