@@ -53,9 +53,11 @@ const init = async () => {
         message: response.message,
       }).statusCode(response.statusCode);
     } else if (response instanceof Error) {
-      if (process.env.NODE_ENV !== 'production') {
-        console.error(response);
-      }
+      // if (process.env.NODE_ENV !== 'production') {
+      //   console.error(response);
+      // }
+
+      console.log(response);
 
       return h.response({
         error: true,
