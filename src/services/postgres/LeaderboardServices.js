@@ -29,9 +29,10 @@ class LeaderboardServices {
     return resultId;
   }
 
-  async getItems() {
+  async getItemsByLevel(level) {
     const query = {
-      text: 'SELECT * FROM leaderboard',
+      text: 'SELECT * FROM leaderboard WHERE level = $1',
+      values: [level],
     };
 
     const result = await this._pool.query(query);

@@ -7,10 +7,10 @@ class LeaderboardHandler {
     this.getLeaderboardHandler = this.getLeaderboardHandler.bind(this);
   }
 
-  async postLeaderboardHandler(request, h) {
-    this._validator.validatePayload(request.payload);
+  async postLeaderboardHandler({payload}, h) {
+    this._validator.validatePayload(payload);
 
-    const {level, username, steps, commands, time_ms: timeMs} = request.payload;
+    const {level, username, steps, commands, time_ms: timeMs} = payload;
 
     const itemId = await this._service.addItem({
       level, username, steps, commands, timeMs,
@@ -25,12 +25,26 @@ class LeaderboardHandler {
     }).code(201);
   }
 
-  async getLeaderboardHandler() {
-    const items = await this._service.getItems();
+  async getLeaderboardHandler({query}) {
+    this._validator.validateQuery(query);
+
+    const {
+      level,
+      sortBy,
+      order,
+    } = query;
+
+    const items = await this._service.getItemsByLevel(level);
+
+    items.sort((a, b) =>
+      order === 'desc' ?
+        b[sortBy] - a[sortBy] :
+        a[sortBy] - b[sortBy],
+    );
 
     return {
       error: false,
-      message: 'Leaderboard',
+      message: 'Leaderboard retrieved',
       data: {
         count: items.length,
         items,

@@ -8,4 +8,13 @@ const LeaderboardPayloadSchema = Joi.object({
   time_ms: Joi.number().integer().min(0).required(),
 });
 
-module.exports = {LeaderboardPayloadSchema};
+const LeaderboardQuerySchema = Joi.object({
+  level: Joi.number().integer().min(0).required(),
+  sortBy: Joi.string().valid('steps', 'commands', 'timeMs').default('steps'),
+  order: Joi.string().valid('asc', 'desc').default('desc'),
+});
+
+module.exports = {
+  LeaderboardPayloadSchema,
+  LeaderboardQuerySchema,
+};

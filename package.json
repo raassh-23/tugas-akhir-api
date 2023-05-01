@@ -1,6 +1,6 @@
 {
   "name": "tugas-akhir-api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "src/server.js",
   "scripts": {
