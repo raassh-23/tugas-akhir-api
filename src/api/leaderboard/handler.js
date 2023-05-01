@@ -8,9 +8,13 @@ class LeaderboardHandler {
   }
 
   async postLeaderboardHandler({payload}, h) {
-    this._validator.validatePayload(payload);
-
-    const {level, username, steps, commands, time_ms: timeMs} = payload;
+    const {
+      level,
+      username,
+      steps,
+      commands,
+      time_ms: timeMs,
+    } = this._validator.validatePayload(payload);
 
     const itemId = await this._service.addItem({
       level, username, steps, commands, timeMs,
@@ -26,13 +30,11 @@ class LeaderboardHandler {
   }
 
   async getLeaderboardHandler({query}) {
-    this._validator.validateQuery(query);
-
     const {
       level,
       sortBy,
       order,
-    } = query;
+    } = this._validator.validateQuery(query);
 
     const items = await this._service.getItemsByLevel(level);
 

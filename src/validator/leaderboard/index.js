@@ -8,6 +8,8 @@ const LeaderboardValidator = {
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
   validateQuery: (query) => {
     const validationResult = LeaderboardQuerySchema.validate(query);
@@ -15,6 +17,8 @@ const LeaderboardValidator = {
     if (validationResult.error) {
       throw new InvariantError(validationResult.error.message);
     }
+
+    return validationResult.value;
   },
 };
 
