@@ -5,6 +5,7 @@ const Hapi = require('@hapi/hapi');
 
 const leaderboard = require('./api/leaderboard');
 const LeaderboardServices = require('./services/postgres/LeaderboardServices');
+const LeaderboardValidator = require('./validator/leaderboard');
 
 const ClientError = require('./exceptions/ClientError');
 
@@ -41,6 +42,7 @@ const init = async () => {
       plugin: leaderboard,
       options: {
         service: leaderboardService,
+        validator: LeaderboardValidator,
       },
     },
   ]);
@@ -51,13 +53,9 @@ const init = async () => {
       return h.response({
         error: true,
         message: response.message,
-      }).statusCode(response.statusCode);
+      }).code(response.statusCode);
     } else if (response instanceof Error) {
-      // if (process.env.NODE_ENV !== 'production') {
-      //   console.error(response);
-      // }
-
-      console.log(response);
+      console.error(response);
 
       return h.response({
         error: true,

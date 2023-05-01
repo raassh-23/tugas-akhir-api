@@ -1,12 +1,15 @@
 class LeaderboardHandler {
-  constructor(service) {
+  constructor(service, validator) {
     this._service = service;
+    this._validator = validator;
 
     this.postLeaderboardHandler = this.postLeaderboardHandler.bind(this);
     this.getLeaderboardHandler = this.getLeaderboardHandler.bind(this);
   }
 
   async postLeaderboardHandler(request, h) {
+    this._validator.validatePayload(request.payload);
+
     const {level, username, steps, commands, time_ms: timeMs} = request.payload;
 
     const itemId = await this._service.addItem({

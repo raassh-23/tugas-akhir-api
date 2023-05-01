@@ -1,6 +1,6 @@
 {
   "name": "tugas-akhir-api",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "src/server.js",
   "scripts": {
@@ -20,6 +20,7 @@
   "dependencies": {
     "@hapi/hapi": "^21.3.2",
     "dotenv": "^16.0.3",
+    "joi": "^17.9.2",
     "pg": "^8.10.0"
   },
   "engines": {
