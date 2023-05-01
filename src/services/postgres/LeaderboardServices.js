@@ -13,9 +13,9 @@ class LeaderboardServices {
 
   async addItem({level, username, steps, commands, timeMs}) {
     const query = {
-      text: 'INSERT INTO leaderboard' +
-        '(level, username, steps, commands, time_ms) ' +
-        'VALUES($1, $2, $3, $4, $5) RETURNING id',
+      text: `INSERT INTO \
+            leaderboard(level, username, steps, commands, time_ms) \
+            VALUES($1, $2, $3, $4, $5) RETURNING id`,
       values: [level, username, steps, commands, timeMs],
     };
 
@@ -29,9 +29,14 @@ class LeaderboardServices {
     return resultId;
   }
 
-  async getItemsByLevel(level) {
+  async getItemsByLevel(level, sortBy, order) {
+    if (sortBy === 'timeMs') {
+      sortBy = 'time_ms';
+    }
+
     const query = {
-      text: 'SELECT * FROM leaderboard WHERE level = $1',
+      text: `SELECT * FROM leaderboard WHERE level = $1 \
+            ORDER BY ${sortBy} ${order}, username ASC, id ASC`,
       values: [level],
     };
 

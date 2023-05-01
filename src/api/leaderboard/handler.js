@@ -36,13 +36,7 @@ class LeaderboardHandler {
       order,
     } = this._validator.validateQuery(query);
 
-    const items = await this._service.getItemsByLevel(level);
-
-    items.sort((a, b) =>
-      order === 'desc' ?
-        b[sortBy] - a[sortBy] :
-        a[sortBy] - b[sortBy],
-    );
+    const items = await this._service.getItemsByLevel(level, sortBy, order);
 
     return {
       error: false,
