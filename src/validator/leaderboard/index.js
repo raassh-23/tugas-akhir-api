@@ -1,12 +1,12 @@
 const {LeaderboardPayloadSchema, LeaderboardQuerySchema} = require('./schema');
-const InvariantError = require('../../exceptions/InvariantError');
+const InvalidError = require('../../exceptions/InvalidError');
 
 const LeaderboardValidator = {
   validatePayload: (payload) => {
     const validationResult = LeaderboardPayloadSchema.validate(payload);
 
     if (validationResult.error) {
-      throw new InvariantError(validationResult.error.message);
+      throw new InvalidError(validationResult.error.message);
     }
 
     return validationResult.value;
@@ -15,7 +15,7 @@ const LeaderboardValidator = {
     const validationResult = LeaderboardQuerySchema.validate(query);
 
     if (validationResult.error) {
-      throw new InvariantError(validationResult.error.message);
+      throw new InvalidError(validationResult.error.message);
     }
 
     return validationResult.value;

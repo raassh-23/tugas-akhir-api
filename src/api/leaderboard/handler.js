@@ -1,3 +1,5 @@
+const InvalidError = require('../../exceptions/InvalidError');
+
 class LeaderboardHandler {
   constructor(service, validator) {
     this._service = service;
@@ -8,17 +10,9 @@ class LeaderboardHandler {
   }
 
   async postLeaderboardHandler({payload}, h) {
-    const {
-      level,
-      username,
-      steps,
-      commands,
-      time_ms: timeMs,
-    } = this._validator.validatePayload(payload);
+    const newItem = this._validator.validatePayload(payload);
 
-    const itemId = await this._service.addItem({
-      level, username, steps, commands, timeMs,
-    });
+    const itemId = await this._service.addItem(newItem);
 
     return h.response({
       error: false,
@@ -34,14 +28,26 @@ class LeaderboardHandler {
       level,
       sortBy,
       order,
+      page,
+      pageSize,
     } = this._validator.validateQuery(query);
 
-    const items = await this._service.getItemsByLevel(level, sortBy, order);
+    const totalCount = await this._service.getCountByLevel(level);
+    const maxPage = Math.ceil(totalCount/pageSize) || 1;
+
+    if (page > maxPage) {
+      throw new InvalidError('Page exceeds max page');
+    }
+
+    const items = await this._service
+        .getItemsByLevel(level, sortBy, order, page, pageSize);
 
     return {
       error: false,
       message: 'Leaderboard retrieved',
       data: {
+        page,
+        maxPage,
         count: items.length,
         items,
       },

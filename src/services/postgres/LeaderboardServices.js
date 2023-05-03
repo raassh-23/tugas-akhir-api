@@ -1,5 +1,5 @@
 const {Pool} = require('pg');
-const InvariantError = require('../../exceptions/InvariantError');
+const InvalidError = require('../../exceptions/InvalidError');
 const {mapLeaderboardDBToModel} = require('../../utils');
 
 class LeaderboardServices {
@@ -23,26 +23,38 @@ class LeaderboardServices {
     const resultId = rows[0].id;
 
     if (!resultId) {
-      throw new InvariantError('Can\'t add item to leaderboard');
+      throw new InvalidError('Can\'t add item to leaderboard');
     }
 
     return resultId;
   }
 
-  async getItemsByLevel(level, sortBy, order) {
+  async getItemsByLevel(level, sortBy, order, page, pageSize) {
     if (sortBy === 'timeMs') {
       sortBy = 'time_ms';
     }
 
     const query = {
       text: `SELECT * FROM leaderboard WHERE level = $1 \
-            ORDER BY ${sortBy} ${order}, username ASC, id ASC`,
+            ORDER BY ${sortBy} ${order}, username ASC, id ASC \
+            LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`,
       values: [level],
     };
 
-    const result = await this._pool.query(query);
+    const {rows} = await this._pool.query(query);
 
-    return result.rows.map(mapLeaderboardDBToModel);
+    return rows.map(mapLeaderboardDBToModel);
+  }
+
+  async getCountByLevel(level) {
+    const query = {
+      text: `SELECT count(id) FROM leaderboard WHERE level = $1`,
+      values: [level],
+    };
+
+    const {rows} = await this._pool.query(query);
+
+    return rows[0].count;
   }
 }
 
