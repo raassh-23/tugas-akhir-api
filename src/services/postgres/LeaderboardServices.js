@@ -11,12 +11,12 @@ class LeaderboardServices {
       });
   }
 
-  async addItem({level, username, steps, commands, timeMs}) {
+  async addItem({level, username, actions, codeBlocks, timeMs}) {
     const query = {
       text: `INSERT INTO \
-            leaderboard(level, username, steps, commands, time_ms) \
+            leaderboard(level, username, actions, code_blocks, time_ms) \
             VALUES($1, $2, $3, $4, $5) RETURNING id`,
-      values: [level, username, steps, commands, timeMs],
+      values: [level, username, actions, codeBlocks, timeMs],
     };
 
     const {rows} = await this._pool.query(query);
@@ -32,6 +32,8 @@ class LeaderboardServices {
   async getItemsByLevel(level, sortBy, order, page, pageSize) {
     if (sortBy === 'timeMs') {
       sortBy = 'time_ms';
+    } else if (sortBy === 'codeBlocks') {
+      sortBy = 'code_blocks';
     }
 
     const query = {

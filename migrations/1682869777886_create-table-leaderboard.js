@@ -13,11 +13,11 @@ exports.up = (pgm) => {
       type: 'varchar(100)',
       notNull: true,
     },
-    steps: {
+    actions: {
       type: 'integer',
       notNull: true,
     },
-    commands: {
+    code_blocks: {
       type: 'integer',
       notNull: true,
     },

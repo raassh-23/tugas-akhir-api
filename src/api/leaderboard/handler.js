@@ -1,4 +1,5 @@
 const InvalidError = require('../../exceptions/InvalidError');
+const {translateModelColumnNameToDB} = require('../../utils');
 
 class LeaderboardHandler {
   constructor(service, validator) {
@@ -39,8 +40,10 @@ class LeaderboardHandler {
       throw new InvalidError('Page exceeds max page');
     }
 
+    const translatedSortBy = translateModelColumnNameToDB(sortBy);
+
     const items = await this._service
-        .getItemsByLevel(level, sortBy, order, page, pageSize);
+        .getItemsByLevel(level, translatedSortBy, order, page, pageSize);
 
     return {
       error: false,
