@@ -38,7 +38,7 @@ class LeaderboardServices {
 
     const query = {
       text: `SELECT * FROM leaderboard WHERE level = $1 \
-            ORDER BY ${sortBy} ${order}, username ASC, id ASC \
+            ORDER BY ${sortBy} ${order}, created_at ASC \
             LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`,
       values: [level],
     };
