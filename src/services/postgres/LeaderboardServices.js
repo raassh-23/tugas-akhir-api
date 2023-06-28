@@ -11,12 +11,12 @@ class LeaderboardServices {
       });
   }
 
-  async addItem({level, username, actions, codeBlocks, timeMs}) {
+  async addItem({level, username, steps, codeBlocks, timeMs}) {
     const query = {
       text: `INSERT INTO \
-            leaderboard(level, username, actions, code_blocks, time_ms) \
+            leaderboard(level, username, steps, code_blocks, time_ms) \
             VALUES($1, $2, $3, $4, $5) RETURNING id`,
-      values: [level, username, actions, codeBlocks, timeMs],
+      values: [level, username, steps, codeBlocks, timeMs],
     };
 
     const {rows} = await this._pool.query(query);

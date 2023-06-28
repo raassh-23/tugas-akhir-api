@@ -1,11 +1,11 @@
 {
   "name": "tugas-akhir-api",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "start-dev": "nodemon src/server.js",
+    "dev": "nodemon src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./",
     "migrate": "node-pg-migrate"

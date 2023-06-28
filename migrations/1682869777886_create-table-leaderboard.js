@@ -13,7 +13,7 @@ exports.up = (pgm) => {
       type: 'varchar(100)',
       notNull: true,
     },
-    actions: {
+    steps: {
       type: 'integer',
       notNull: true,
     },
