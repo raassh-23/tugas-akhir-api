@@ -1,3 +1,5 @@
+const InvalidError = require('../exceptions/InvalidError');
+
 /* eslint-disable camelcase */
 const mapLeaderboardDBToModel = ({
   id,
@@ -22,6 +24,11 @@ const translateModelColumnNameToDB = (columnName) => {
     return 'code_blocks';
   } else if (columnName === 'timeMs') {
     return 'time_ms';
+  } else if (
+    ['id', 'level', 'username', 'steps', 'created_at']
+        .indexOf(columnName) === -1
+  ) {
+    throw new InvalidError('Invalid column name');
   }
 
   return columnName;

@@ -30,12 +30,6 @@ class LeaderboardServices {
   }
 
   async getItemsByLevel(level, sortBy, order, page, pageSize) {
-    if (sortBy === 'timeMs') {
-      sortBy = 'time_ms';
-    } else if (sortBy === 'codeBlocks') {
-      sortBy = 'code_blocks';
-    }
-
     const query = {
       text: `SELECT * FROM leaderboard WHERE level = $1 \
             ORDER BY ${sortBy} ${order}, created_at ASC \
