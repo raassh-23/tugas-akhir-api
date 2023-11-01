@@ -14,7 +14,7 @@ class LeaderboardServices {
   async addItem({level, username, steps, codeBlocks, timeMs}) {
     const query = {
       text: `INSERT INTO \
-            leaderboard(level, username, steps, code_blocks, time_ms) \
+            leaderboard_gigabot(level, username, steps, code_blocks, time_ms) \
             VALUES($1, $2, $3, $4, $5) RETURNING id`,
       values: [level, username, steps, codeBlocks, timeMs],
     };
@@ -31,7 +31,7 @@ class LeaderboardServices {
 
   async getItemsByLevel(level, sortBy, order, page, pageSize) {
     const query = {
-      text: `SELECT * FROM leaderboard WHERE level = $1 \
+      text: `SELECT * FROM leaderboard_gigabot WHERE level = $1 \
             ORDER BY ${sortBy} ${order}, created_at ASC \
             LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}`,
       values: [level],
@@ -44,7 +44,7 @@ class LeaderboardServices {
 
   async getCountByLevel(level) {
     const query = {
-      text: `SELECT count(id) FROM leaderboard WHERE level = $1`,
+      text: `SELECT count(id) FROM leaderboard_gigabot WHERE level = $1`,
       values: [level],
     };
 

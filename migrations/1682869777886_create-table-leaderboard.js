@@ -3,7 +3,7 @@
 exports.shorthands = undefined;
 
 exports.up = (pgm) => {
-  pgm.createTable('leaderboard', {
+  pgm.createTable('leaderboard_gigabot', {
     id: 'id',
     level: {
       type: 'integer',
@@ -34,5 +34,5 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
-  pgm.dropTable('leaderboard');
+  pgm.dropTable('leaderboard_gigabot');
 };
